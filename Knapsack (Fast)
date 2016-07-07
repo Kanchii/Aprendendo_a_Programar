@@ -1,0 +1,59 @@
+#include <iostream>
+#include <map>
+#include <vector>
+#include <string>
+#include <cstdlib>
+#include <cstdio>
+#include <cmath>
+#include <list>
+#include <queue>
+#include <stack>
+#include <algorithm>
+#include <numeric>
+#include <cctype>
+
+using namespace std;
+
+int V[10001];
+
+int knapsack(int capacidade, int peso[], int valor[], int quantItens){
+	
+	for(int i = 0; i <= capacidade; i++){
+		V[i] = 0;
+	}
+	
+	for(int i = 1; i <= quantItens; i++){
+		for(int j = capacidade; j >= 0; j--){
+			V[j] = (peso[i-1] > j) ? V[j] : max(V[j], V[j - peso[i-1]] + valor[i-1]);
+		}
+	}
+	
+	return V[capacidade];	
+}
+
+int main() {
+	
+	int quantItens;
+	
+	cout << "Digite a quantidade de itens que podem ser colocados na mochila: " << endl;
+	
+	cin >> quantItens;
+	
+	int peso[quantItens], valor[quantItens]; 			//Vetores para o peso do item e seu valor, respectivamente
+	
+	for(int i = 0; i < quantItens; i++){
+		cout << "Digite o peso e o valor do item: " << endl;
+		cin >> peso[i] >> valor[i];
+	}
+	
+	int capacidade;
+	
+	cout << "Digite a capacidade maxima da mochila: " << endl;
+	cin >> capacidade;
+	
+	int result = knapsack(capacidade, peso, valor, quantItens);
+	
+	cout << "O valor maximo que a mochila pode carregar eh: " << result << endl;
+	
+	return 0;
+}
