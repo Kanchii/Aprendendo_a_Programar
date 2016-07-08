@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <string>
+#include <set>
+#include <algorithm>
+#include <iomanip>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <cctype>
+#include <sstream>
+
+#define INF 10000000
+
+using namespace std;
+
+int coinChange(vector<int> moedas, int troco){
+
+    int tabela[troco + 1];                        //Criando a tabela onde ficarao armazenado o numero minimo de moedas
+                                                  //para cada quantidade de troco
+    tabela[0] = 0;                                //Para 0 de troco, sao necessarias 0 moedas XD
+
+    for(int i = 1; i <= troco; i++){
+        tabela[i] = INF;                          //Inicializando toda a tabela com um valor INF (10000000, como definido no topo)
+    }
+
+    for(int i = 1; i <= troco; i++){
+        for(int j = 0; j < moedas.size(); j++){
+            if(moedas[j] <= i){                         //Se o valor da moeda na posicao J for menor que o valor do troco que esta sendo calculado
+                int aux = tabela[i - moedas[j]];        //aux recebe o valor da tabela na posicao do troco i menos o valor da moeda na posicao J
+                if(aux != INF && aux + 1 < tabela[i]){  //Entao se o valor de aux for diferente de INF e se somado a 1 (mais uma moeda) for menor que o valor da tabela na posicao do troco i
+                    tabela[i] = aux + 1;                //Entao atualizamos o valor da tabela na posicao do troco i
+                }
+            }
+        }
+    }
+
+    return tabela[troco];                               //Retornamos o valor da tabela na posicao do troco pedido, ou seja, o numero minimo
+                                                        //de moedas para o troco requisitado
+}
+
+int main(){
+
+    vector<int> moedas;
+    moedas.push_back(9);                        //Colocando as moedas no vector
+    moedas.push_back(6);
+    moedas.push_back(5);
+    moedas.push_back(1);
+
+    int troco = 11;                             //Indicando o troco que devemos computar
+
+    cout << "Minimum coins required is " << coinChange(moedas, troco) << endl;      //Chamando a funcao coinChange para calcular o 
+                                                                                    //numero minimo de moedas para o troco
+    return 0;
+}
