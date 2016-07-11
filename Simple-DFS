@@ -26,7 +26,7 @@ void DFS(map<int, vector<int> > mapa, int origem){
         visited[daVez] = true;
         p.pop();
         for(int i = 0; i < mapa[daVez].size(); i++){
-            if(!visited){
+            if(!visited[mapa[daVez][i]]){
                 p.push(mapa[daVez][i]);
             }
         }
