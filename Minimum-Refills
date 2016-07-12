@@ -1,0 +1,61 @@
+#include <iomanip>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <map>
+#include <cstdio>
+#include <cstdlib>
+#include <stack>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
+#include <queue>
+#include <list>
+#include <utility>
+
+#define INF 1000000000
+
+using namespace std;
+
+int minRefill(vector<int> x, int n, int L){
+    int numRefill = 0, currentRefill = 0;
+    while(currentRefill < n - 1){
+        int lastRefill = currentRefill;
+        while(currentRefill < n && x[currentRefill+1] - x[lastRefill] <= L){
+            currentRefill++;
+        }
+
+        if(currentRefill == lastRefill){
+            return -1;
+        }
+        if(currentRefill <= n){
+            numRefill++;
+        }
+    }
+    return numRefill;
+}
+
+int main(){
+
+    int quantDistancias, totalGasolina, pontoFinal;
+
+    cin >> quantDistancias >> totalGasolina;
+
+    vector<int> dist;
+
+    int x;
+
+    for(int i = 0; i < quantDistancias; i++){
+        cin >> x;
+        dist.push_back(x);
+    }
+
+    if(minRefill(dist, quantDistancias, totalGasolina) == -1){
+        cout << "Impossible" << endl;
+    } else {
+        cout << "O numero minimo de refills eh: " << minRefill(dist, quantDistancias, totalGasolina) << endl;
+    }
+
+    return 0;
+}
