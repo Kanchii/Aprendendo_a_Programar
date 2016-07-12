@@ -1,0 +1,75 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <string.h>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <strstream>
+#include <stdio.h>
+#include <vector>
+#include <stdlib.h>
+#include <math.h>
+#include <ctype.h>
+#include <map>
+#include <string.h>
+#include <set>
+#include <stack>
+#include <utility>
+
+#define INF 1000000000
+
+using namespace std;
+
+set<string> beta;
+
+void combination(vector<pair<char, int> > vet, string a, int pos){
+    if(!a.empty()){
+        beta.insert(a);
+    }
+    for(int i = pos; i < vet.size(); i++){
+        if(vet[i].second != 0){
+            a += vet[i].first;
+            vet[i].second--;
+            combination(vet, a, i);
+            a.erase(a.size() - 1);
+            vet[i].second++;
+        }
+    }
+}
+
+int main(){
+
+    char a[10000];
+
+    while(scanf("%s", a) != EOF){
+        vector<pair<char, int> > vet;
+        int cont = 1;
+        for(int i = 0; i < strlen(a); i++){
+            if(a[i] == a[i+1] && i + 1 < strlen(a)){
+                cont++;
+            } else {
+                vet.push_back(make_pair(a[i], cont));
+                cont = 1;
+            }
+        }
+
+        string c;
+
+        combination(vet, c, 0);
+
+        set<string>::iterator it = beta.begin();
+        for(it; it != beta.end(); it++){
+            printf("%s\n", it -> c_str());
+        }
+
+        printf("\n");
+
+        beta.clear();
+
+    }
+
+    return 0;
+}
+
+
