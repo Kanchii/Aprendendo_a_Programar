@@ -28,18 +28,19 @@ void inicializar(int quantE){
 }
 
 void BFS(map<int, vector<int> > adj, int O, map<pair<int, int>, int> custo){
-    queue<int> fila;
-    fila.push(O);
+    set<pair<int, int> > fila;
+    fila.insert(make_pair(0, O));
     dist[O] = 0;
 
     while(!fila.empty()){
-        int daVez = fila.front();
-        fila.pop();
+        set<pair<int, int> >::iterator it = fila.begin();
+        int daVez = it -> second;
+        fila.erase(it);
         for(int i = 0; i < adj[daVez].size(); i++){
             if(dist[adj[daVez][i]] == INF){
                 dist[adj[daVez][i]] = dist[daVez] + custo[make_pair(daVez, adj[daVez][i])];
                 seq[adj[daVez][i]] = daVez;
-                fila.push(adj[daVez][i]);
+                fila.insert(make_pair(dist[adj[daVez][i]], adj[daVez][i]));
             } else {
                 if(dist[daVez] + custo[make_pair(daVez, adj[daVez][i])] < dist[adj[daVez][i]]){
                     dist[adj[daVez][i]] = dist[daVez] + custo[make_pair(daVez, adj[daVez][i])];
