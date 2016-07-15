@@ -1,0 +1,62 @@
+#include <iomanip>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <map>
+#include <cstdio>
+#include <cstdlib>
+#include <stack>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
+#include <string.h>
+#include <queue>
+#include <list>
+#include <utility>
+
+#define INF 100000000
+
+using namespace std;
+
+void init(int subset[], int quantE){
+    for(int i = 0; i <= quantE; i++){
+        subset[i] = -1;
+    }
+}
+
+int Find(int subset[], int v){
+    if(subset[v] == -1){
+        return v;
+    }
+    return Find(subset, subset[v]);
+}
+
+void Union(int subset[], int v1, int v2){
+    int v1_set = Find(subset, v1);
+    int v2_set = Find(subset, v2);
+    subset[v1_set] = v2_set;
+}
+
+int main(){
+
+    int quantE, quantV;
+
+    cin >> quantE >> quantV;
+
+    int *subset = new int[quantE + 1];
+    init(subset, quantE);
+
+    int x, y;
+
+    for(int i = 0; i < quantV; i++){
+        cin >> x >> y;
+        int v1 = Find(subset, x);
+        int v2 = Find(subset, y);
+        if(v1 != v2){
+            Union(subset, v1, v2);
+        }
+    }
+
+    return 0;
+}
