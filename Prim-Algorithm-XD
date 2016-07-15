@@ -37,15 +37,10 @@ void Prim(vector<vector<int> > adj, map<pair<int, int>, int> custo, int O){
         int daVez = fila.top().second;
         fila.pop();
         for(int i = 0; i < adj[daVez].size(); i++){
-            if(dist[adj[daVez][i]] == INF){
+            if(dist[adj[daVez][i]] > custo[make_pair(daVez, adj[daVez][i])] && parent[daVez] != adj[daVez][i]){
                 dist[adj[daVez][i]] = custo[make_pair(daVez, adj[daVez][i])];
                 parent[adj[daVez][i]] = daVez;
                 fila.push(make_pair(dist[adj[daVez][i]], adj[daVez][i]));
-            } else {
-                if(dist[adj[daVez][i]] > custo[make_pair(daVez, adj[daVez][i])] && parent[daVez] != adj[daVez][i]){
-                    dist[adj[daVez][i]] = custo[make_pair(daVez, adj[daVez][i])];
-                    parent[adj[daVez][i]] = daVez;
-                }
             }
         }
     }
