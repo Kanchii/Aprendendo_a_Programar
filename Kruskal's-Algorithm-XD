@@ -19,7 +19,7 @@
 
 using namespace std;
 
-int find(int subset[], int v){
+int Find(int subset[], int v){
     if(subset[v] == -1){
         return v;
     }
