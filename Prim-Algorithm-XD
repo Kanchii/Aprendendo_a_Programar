@@ -26,6 +26,8 @@ void init(int quantE){
     }
 }
 
+map<int, bool> visited;
+
 void Prim(vector<vector<int> > adj, map<pair<int, int>, int> custo, int O){
     priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > fila;
     fila.push(make_pair(0, O));
@@ -36,11 +38,20 @@ void Prim(vector<vector<int> > adj, map<pair<int, int>, int> custo, int O){
     while(!fila.empty()){
         int daVez = fila.top().second;
         fila.pop();
+        visited[daVez] = true;
         for(int i = 0; i < adj[daVez].size(); i++){
-            if(dist[adj[daVez][i]] > custo[make_pair(daVez, adj[daVez][i])] && parent[daVez] != adj[daVez][i]){
+            if(dist[adj[daVez][i]] == INF){
                 dist[adj[daVez][i]] = custo[make_pair(daVez, adj[daVez][i])];
                 parent[adj[daVez][i]] = daVez;
                 fila.push(make_pair(dist[adj[daVez][i]], adj[daVez][i]));
+            } else {
+                if(!visited[adj[daVez][i]]){
+                    if(dist[adj[daVez][i]] > custo[make_pair(daVez, adj[daVez][i])]){
+                        dist[adj[daVez][i]] = custo[make_pair(daVez, adj[daVez][i])];
+                        parent[adj[daVez][i]] = daVez;
+                        fila.push(make_pair(dist[adj[daVez][i]], adj[daVez][i]));
+                    }
+                }
             }
         }
     }
