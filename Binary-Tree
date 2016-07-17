@@ -1,0 +1,150 @@
+#include <iomanip>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <map>
+#include <cstdio>
+#include <cstdlib>
+#include <stack>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
+#include <string.h>
+#include <queue>
+#include <list>
+#include <utility>
+
+#define INF 100000000
+
+using namespace std;
+
+void inserirNo(int vet[], int no, int pos){
+    if(vet[pos] == INF){
+        vet[pos] = no;
+    } else if(no > vet[pos]){
+        inserirNo(vet, no, 2*pos + 2);
+    } else {
+        inserirNo(vet, no, 2*pos + 1);
+    }
+
+}
+
+void printaPre(int vet[], int pos){
+
+    if(vet[pos] != INF){
+        cout << vet[pos] << " ";
+        printaPre(vet, 2*pos + 1);
+        printaPre(vet, 2*pos + 2);
+    }
+
+
+}
+
+void printaIn(int vet[], int pos){
+    if(vet[2*pos + 1] == INF && vet[2*pos + 2] == INF){
+        cout << vet[pos] << " ";
+    } else {
+        if(vet[2*pos + 1] != INF){
+            printaIn(vet, 2*pos + 1);
+        }
+        cout << vet[pos] << " ";
+        if(vet[2*pos + 2] != INF){
+            printaIn(vet, 2*pos + 2);
+        }
+    }
+
+}
+
+void printaPos(int vet[], int pos){
+    if(vet[2*pos + 1] != INF){
+        printaPos(vet, 2*pos + 1);
+    }
+    if(vet[2*pos + 2] != INF){
+        printaPos(vet, 2*pos + 2);
+    }
+    cout << vet[pos] << " ";
+}
+
+bool pesquisaNo(int vet[], int no, int pos){
+
+    if(vet[pos] == INF){
+        return false;
+    } else if(no == vet[pos]){
+        return true;
+    } else if(no > vet[pos]){
+        if(pesquisaNo(vet, no, 2*pos + 2)){
+            return true;
+        }
+    } else {
+        if(pesquisaNo(vet, no, 2*pos + 1)){
+            return true;
+        }
+    }
+
+    return false;
+
+}
+
+void init(int vet[]){
+    for(int i = 0; i < 1000; i++){
+        vet[i] = INF;
+    }
+}
+
+int main(){
+
+    int testes;
+
+    cout << "Algoritmo de insercao, busca e ordenamento PRE/POS/INFIXO em uma arvore binaria\n";
+
+    int vet[100000];
+
+    init(vet);
+
+    cout << "Digite o numero de operacoes: ";
+    cin >> testes;
+    cout << endl;
+
+    int no;
+
+    cout << "Digite os nos que serao inseridos na arvore:\n";
+
+    for(int i = 0; i < testes; i++){
+        cin >> no;
+        inserirNo(vet, no, 0);
+        cout << "No inserido com sucesso!\n";
+    }
+
+    int buscar = false;
+
+    cout << "Deseja fazer alguma busca na arvore? (1 p/ S e 2 p/ N)\n";
+    cin >> buscar;
+    if(buscar == 1){
+        cout << "Quantas buscas deseja realizar?\n";
+        cin >> testes;
+
+        for(int i = 0; i < testes; i++){
+            cout << "Digite o numero para fazer a busca: " << endl;
+            cin >> no;
+            if(pesquisaNo(vet, no, 0)){
+                cout << "O no se encontra na arvore!\n";
+            } else {
+                cout << "O no nao se encontra na arvore!\n";
+            }
+        }
+    }
+
+    cout << endl;
+    cout << "Sequencia PREFIXA:\n";
+    printaPre(vet, 0);
+    cout << endl;
+    cout << endl;
+    cout << "Sequencia INFIXA:\n";
+    printaIn(vet, 0);
+    cout << endl;
+    cout << endl;
+    cout << "Sequencia POSFIXA:\n";
+    printaPos(vet, 0);
+    return 0;
+}
