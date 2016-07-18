@@ -1,0 +1,187 @@
+#include <iomanip>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <map>
+#include <cstdio>
+#include <cstdlib>
+#include <stack>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
+#include <string.h>
+#include <queue>
+#include <list>
+#include <utility>
+
+#define INF 100000000
+
+using namespace std;
+
+struct node {
+    int value;
+    node *left;
+    node *right;
+};
+
+node *root = NULL;
+
+void insertNode(int key, node *leaf){
+    if(key < leaf -> value){
+        if(leaf -> left == NULL){
+            leaf -> left = new node;
+            leaf -> left -> value = key;
+            leaf -> left -> left = NULL;
+            leaf -> left -> right = NULL;
+        } else {
+            insertNode(key, leaf -> left);
+        }
+    } else {
+        if(leaf -> right == NULL){
+            leaf -> right = new node;
+            leaf -> right -> value = key;
+            leaf -> right -> left = NULL;
+            leaf -> right -> right = NULL;
+        } else {
+            insertNode(key, leaf -> right);
+        }
+    }
+}
+
+bool searchNode(int key, node *root){
+    if(root -> value == key){
+        return true;
+    } else {
+        if(key < root -> value){
+            if(root -> left == NULL){
+                return false;
+            } else {
+                if(searchNode(key, root -> left)){
+                    return true;
+                }
+            }
+        } else {
+            if(root -> right == NULL){
+                return false;
+            } else {
+                if(searchNode(key, root -> right)){
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+
+}
+
+void removeNodeU(node *root){
+    if(root != NULL){
+        removeNodeU(root -> left);
+        removeNodeU(root -> right);
+        root -> left = NULL;
+        root -> right = NULL;
+        root -> value = NULL;
+    }
+}
+
+void removeNodeS(int key, node *root){
+    if(root -> left != NULL){
+        if(root -> left -> value == key){
+            removeNodeU(root -> left);
+            root -> left = NULL;
+        }
+    }
+    if(root -> right != NULL){
+        if(root -> right -> value == key){
+            removeNodeU(root -> right);
+            root -> right = NULL;
+        }
+    }
+
+    if(root -> right == NULL && root -> left == NULL){
+
+    } else {
+        if(key < root -> value && root -> left != NULL){
+            removeNodeS(key, root -> left);
+        } else if(key > root -> value && root -> right != NULL){
+            removeNodeS(key, root -> right);
+        }
+    }
+}
+
+void arvorePre(node *root){
+    if(root != NULL){
+        cout << root -> value << " ";
+        arvorePre(root -> left);
+        arvorePre(root -> right);
+    }
+}
+
+void arvorePos(node *root){
+    if(root != NULL){
+        arvorePos(root -> left);
+        arvorePos(root -> right);
+        cout << root -> value << " ";
+    }
+}
+
+void arvoreIn(node *root){
+    if(root -> left == NULL && root -> right == NULL){
+        cout << root -> value << " ";
+    } else {
+        if(root -> left != NULL){
+            arvoreIn(root -> left);
+        }
+        cout << root -> value << " ";
+        if(root -> right != NULL){
+            arvoreIn(root -> right);
+        }
+    }
+}
+
+int main(){
+
+    int key;
+
+    int quantOp;
+
+    cin >> quantOp;
+
+    for(int i = 0; i < quantOp; i++){
+        cin >> key;
+        if(root == NULL){
+            root = new node;
+            root -> value = key;
+            root -> left = NULL;
+            root -> right = NULL;
+        } else {
+            insertNode(key, root);
+        }
+    }
+
+    cin >> quantOp;
+
+    for(int i = 0; i < quantOp; i++){
+        cin >> key;
+        if(searchNode(key, root)){
+            cout << "No encontrado na arvore!" << endl;
+        } else {
+            cout << "No nao encontrado na arvore" << endl;
+        }
+    }
+    cout << "Sequencia PREFIXA:\n";
+    arvorePre(root);
+    cout << endl << endl;
+    cout << "Sequencia POSFIXA:\n";
+    arvorePos(root);
+    cout << endl << endl;
+    cout << "Sequencia INFIXA:\n";
+    arvoreIn(root);
+    cout << endl << endl;
+
+
+
+    return 0;
+}
