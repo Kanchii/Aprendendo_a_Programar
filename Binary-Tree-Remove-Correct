@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <numeric>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <queue>
 #include <list>
 #include <utility>
@@ -26,31 +26,35 @@ struct node {
 };
 
 node *root = NULL;
-bool aua = true;
 
-void insertNode(int key, node *leaf){
-    if(key < leaf -> value){
-        if(leaf -> left == NULL){
-            leaf -> left = new node;
-            leaf -> left -> value = key;
-            leaf -> left -> left = NULL;
-            leaf -> left -> right = NULL;
+bool aux = true;
+
+void insertNode(int key, node* &root){
+    if(key < root -> value){
+        if(root -> left == NULL){
+            root -> left = new node;
+            root -> left -> value = key;
+            root -> left -> left = NULL;
+            root -> left -> right = NULL;
         } else {
-            insertNode(key, leaf -> left);
+            insertNode(key, root -> left);
         }
     } else {
-        if(leaf -> right == NULL){
-            leaf -> right = new node;
-            leaf -> right -> value = key;
-            leaf -> right -> left = NULL;
-            leaf -> right -> right = NULL;
+        if(root -> right == NULL){
+            root -> right = new node;
+            root -> right -> value = key;
+            root -> right -> left = NULL;
+            root -> right -> right = NULL;
         } else {
-            insertNode(key, leaf -> right);
+            insertNode(key, root -> right);
         }
     }
 }
 
 bool searchNode(int key, node *root){
+    if(root == NULL){
+        return false;
+    }
     if(root -> value == key){
         return true;
     } else {
@@ -77,90 +81,13 @@ bool searchNode(int key, node *root){
 
 }
 
-void removeNodeU(node *root){
-    if(root != NULL){
-        removeNodeU(root -> left);
-        removeNodeU(root -> right);
-        root -> left = NULL;
-        root -> right = NULL;
-        root -> value = NULL;
-    }
-}
-
-void removeNodeS(int key, node *root){
-    if(root -> left != NULL){
-        if(root -> left -> value == key){
-            removeNodeU(root -> left);
-            root -> left = NULL;
-        }
-    }
-    if(root -> right != NULL){
-        if(root -> right -> value == key){
-            removeNodeU(root -> right);
-            root -> right = NULL;
-        }
-    }
-
-    if(root -> right == NULL && root -> left == NULL){
-
-    } else {
-        if(key < root -> value && root -> left != NULL){
-            removeNodeS(key, root -> left);
-        } else if(key > root -> value && root -> right != NULL){
-            removeNodeS(key, root -> right);
-        }
-    }
-}
-
-void insertAnotherNode(node *key, node *root){
-    if(key -> value < root -> value){
-        if(root -> left == NULL){
-            root -> left = new node;
-            root -> left = key;
-        } else {
-            insertAnotherNode(key, root -> left);
-        }
-    } else {
-        if(root -> right == NULL){
-            root -> right = new node;
-            root -> right = key;
-        } else {
-            insertAnotherNode(key, root -> right);
-        }
-    }
-}
-
-void anotherRemove(int key, node *root){
-    if(root -> left -> value == key){
-        if(root -> left -> right == NULL){
-            root -> left = root -> left -> left;
-        } else {
-            insertAnotherNode(root -> left -> left, root -> left -> right);
-            root -> left = root -> left -> right;
-        }
-    } else if(root -> right -> value == key){
-        if(root -> right -> left == NULL){
-            root -> right = root -> right -> right;
-        } else {
-            insertAnotherNode(root -> right -> left, root -> right -> right);
-            root -> right = root -> right -> right;
-        }
-    } else {
-        if(key < root -> value){
-            anotherRemove(key, root -> left);
-        } else {
-            anotherRemove(key, root -> right);
-        }
-    }
-}
-
 void arvorePre(node *root){
     if(root != NULL){
-        if(aua){
-            cout << root -> value;
-            aua = false;
+        if(aux){
+            printf("%d", root -> value);
+            aux = false;
         } else {
-            cout << " " << root -> value;
+            printf(" %d", root -> value);
         }
         arvorePre(root -> left);
         arvorePre(root -> right);
@@ -171,135 +98,101 @@ void arvorePos(node *root){
     if(root != NULL){
         arvorePos(root -> left);
         arvorePos(root -> right);
-        if(aua){
-            cout << root -> value;
-            aua = false;
+        if(aux){
+            printf("%d", root -> value);
+            aux = false;
         } else {
-            cout << " " << root -> value;
+            printf(" %d", root -> value);
         }
     }
 }
 
 void arvoreIn(node *root){
-    if(root -> left == NULL && root -> right == NULL){
-        if(aua){
-            cout << root -> value;
-            aua = false;
+    if(root != NULL){
+        arvoreIn(root -> left);
+        if(aux){
+            printf("%d", root -> value);
+            aux = false;
         } else {
-            cout << " " << root -> value;
+            printf(" %d", root -> value);
         }
+        arvoreIn(root -> right);
+    }
+}
+
+void arvoreNivel(node *root){
+    queue<node*> fila;
+    fila.push(root);
+
+    while(!fila.empty()){
+        node* aux = fila.front();
+        fila.pop();
+        cout << aux -> value << " ";
+        if(aux -> left != NULL){
+            fila.push(aux -> left);
+        }
+        if(aux -> right != NULL){
+            fila.push(aux -> right);
+        }
+    }
+}
+
+node* removeNode(node* &root){
+    node* new_node;
+    node* aux;
+
+    if(root -> left == NULL){
+        new_node = root -> right;
+        free(root);
+        return new_node;
     } else {
-        if(root -> left != NULL){
-            arvoreIn(root -> left);
+        aux = root;
+        new_node = root -> left;
+        while(new_node -> right != NULL){
+            aux = new_node;
+            new_node = new_node -> right;
         }
-        if(aua){
-            cout << root -> value;
-            aua = false;
-        } else {
-            cout << " " << root -> value;
+        if(aux != root){
+            aux -> right = new_node -> left;
+            new_node -> left = root -> left;
         }
-        if(root -> right != NULL){
-            arvoreIn(root -> right);
-        }
+        new_node -> right = root -> right;
+        free(root);
     }
+
+    return new_node;
 }
 
-node *remove_atual(node *atual){
-    node *no1, *no2;
-    if(atual -> left == NULL){
-        no2 = atual -> right;
-        free(atual);
-        return no2;
-    }
-    no1 = atual;
-    no2 = atual -> left;
-    while(no2 -> right != NULL){
-        no1 = no2;
-        no2 = no2 -> right;
-    }
-
-    if(no1 != atual){
-        no1 -> right = no2 -> left;
-        no2 -> left = atual -> left;
-    }
-    no2 -> right = atual -> right;
-    free(atual);
-    return no2;
-}
-
-int remove_Node(node *root, int key){
-    if(root == NULL){
-        return 0;
-    }
-    node *ant = NULL;
-    node *atual = root;
-
-    while(atual != NULL){
-        if(key == atual -> value){
-            if(atual == root){
-                root = remove_atual(atual);
-            } else {
-                if(ant -> left == atual){
-                    ant -> left = remove_atual(atual);
+void foundNode(int key, node* &root){
+    if(root -> value == key){
+        node* aux = new node;
+        aux = removeNode(root);
+        root = aux;
+    } else {
+        if(key < root -> value){
+            if(root -> left != NULL){
+                if(root -> left -> value == key){
+                    root -> left = removeNode(root -> left);
                 } else {
-                    ant -> right = remove_atual(atual);
+                    foundNode(key, root -> left);
                 }
             }
-            return 1;
-        }
-
-        ant = atual;
-        if(key > atual -> value){
-            atual = atual -> right;
         } else {
-            atual = atual -> left;
+            if(root -> right != NULL){
+                if(root -> right -> value == key){
+                    root -> right = removeNode(root -> right);
+                } else {
+                    foundNode(key, root -> right);
+                }
+            }
         }
-
     }
-    
-    return 1;
-
 }
 
 int main(){
+    
+    /*Algoritmo funcionando com remoção do nodo funcionando certinho, inserção e apresentação também*/
 
-    string a;
-    int b;
-
-    while(cin >> a){
-        if(a == "PREFIXA"){
-            arvorePre(root);
-            cout << endl;
-        } else if(a == "INFIXA"){
-            arvoreIn(root);
-            cout << endl;
-        } else if(a == "POSFIXA"){
-            arvorePos(root);
-            cout << endl;
-        } else {
-            cin >> b;
-            if(a == "I"){
-                if(root == NULL){
-                    root = new node;
-                    root -> value = b;
-                    root -> left = NULL;
-                    root -> right = NULL;
-                } else {
-                    insertNode(b, root);
-                }
-            } else if(a == "P"){
-                if(searchNode(b, root)){
-                    cout << b << " existe\n";
-                } else {
-                    cout << b << " nao existe\n";
-                }
-            } else if(a == "R"){
-                int k = remove_Node(root, b);
-            }
-        }
-        aua = true;
-    }
 
     return 0;
 }
-
