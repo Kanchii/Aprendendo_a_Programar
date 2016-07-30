@@ -1,0 +1,385 @@
+#include <cmath>
+#include <stack>
+#include <cstdio>
+#include <iomanip>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+#define INF 100000000
+
+/*Binary Search Tree*/
+struct node {
+    int value;
+    node* right;
+    node* left;
+};
+
+node* root = NULL;
+bool aux = true;
+
+void insertNode(int key, node* &root){
+    if(root == NULL){
+        root = new node;
+        root -> value = key;
+        root -> right = NULL;
+        root -> left = NULL;
+    } else {
+        if(key < root -> value){
+            insertNode(key, root -> left);
+        } else {
+            insertNode(key, root -> right);
+        }
+    }
+}
+
+bool searchNode(int key, node* root){
+    if(!root){
+        return false;
+    } else {
+        if(root -> value == key){
+            return true;
+        } else {
+            if(key < root -> value){
+                searchNode(key, root -> left);
+            } else {
+                searchNode(key, root -> right);
+            }
+        }
+    }
+}
+
+void printPre(node* root){
+    if(root){
+        if(aux){
+            cout << root -> value;
+            aux = false;
+        } else {
+            cout << " " << root -> value;
+        }
+        printPre(root -> left);
+        printPre(root -> right);
+    }
+}
+
+void printPos(node* root){
+    if(root){
+        printPos(root -> left);
+        printPos(root -> right);
+        if(aux){
+            cout << root -> value;
+            aux = false;
+        } else {
+            cout << " " << root -> value;
+        }
+    }
+}
+
+void printIn(node* root){
+    if(root){
+        printIn(root -> left);
+        if(aux){
+            cout << root -> value;
+            aux = false;
+        } else {
+            cout << " " << root -> value;
+        }
+        printIn(root -> right);
+    }
+}
+
+node* removeNodeUtil(node* &root){
+    node* new_node = new node;
+    node* aux = new node;
+
+    if(root -> left == NULL){
+        new_node = root -> right;
+        free(root);
+        return new_node;
+    }
+
+    aux = root;
+    new_node = root -> left;
+    while(new_node -> right != NULL){
+        aux = new_node;
+        new_node = new_node -> right;
+    }
+    if(aux != root){
+        aux -> right = new_node -> left;
+        new_node -> left = root -> left;
+    }
+    new_node -> right = root -> right;
+    free(root);
+    return new_node;
+
+
+}
+
+void removeNode(int key, node* &root){
+    if(root -> value == key){
+        node* aux = new node;
+        aux = removeNodeUtil(root);
+        root = aux;
+    } else {
+        if(key < root -> value){
+            if(root -> left -> value == key){
+                root -> left = removeNodeUtil(root -> left);
+            } else {
+                removeNode(key, root -> left);
+            }
+        } else {
+            if(root -> right -> value == key){
+                root -> right = removeNodeUtil(root -> right);
+            } else {
+                removeNode(key, root -> right);
+            }
+        }
+    }
+}
+
+int Vi[100001];
+
+void DFS(vector<vector<int> > adj, int origem, bool visited[]){
+    visited[origem] = true;
+    for(int i = 0; i < adj[origem].size(); i++){
+        if(!visited[adj[origem][i]]){
+            DFS(adj, adj[origem][i], visited);
+        }
+    }
+}
+
+void FloydWarshall(int matriz[][1000], int n){
+    for(int k = 1; k<= n; k++){
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= n; j++){
+                if(matriz[i][j] < matriz[i][k] + matriz[k][j]){
+                    matriz[i][j] = matriz[i][k] + matriz[k][j];
+                }
+            }
+        }
+    }
+}
+
+void TopologicalSort(vector<vector<int> > adj, int daVez, bool visited[], stack<int> &pilha){
+    visited[daVez] = true;
+    for(int i = 0; i <adj[daVez].size(); i++){
+        if(!visited[adj[daVez][i]]){
+            TopologicalSort(adj, adj[daVez][i], visited, pilha);
+        }
+    }
+    pilha.push(daVez);
+}
+
+void BFS(vector<vector<int> > adj, int origem, bool visited[], int nivel[]){
+    queue<int> fila;
+    fila.push(origem);
+    nivel[origem] = 0;
+    visited[origem] = true;
+    while(!fila.empty()){
+        int daVez = fila.front();
+        fila.pop();
+        int level = nivel[daVez];
+        for(int i = 0; i < adj[daVez].size(); i++){
+            if(!visited[adj[daVez][i]]){
+                visited[adj[daVez][i]] = true;
+                nivel[adj[daVez][i]] = level + 1;
+                fila.push(adj[daVez][i]);
+            }
+        }
+    }
+}
+
+void printLevelBFS(int nivel[], int a){
+    for(int i = 1; i <= a; i++){
+        cout << "Nivel " << i << ": " << nivel[i] << endl;
+    }
+}
+
+int knapsackFast(int capacidade, int peso[], int valor[], int n){
+
+    for(int i = 0; i <= capacidade; i++){
+        Vi[i] = 0;
+    }
+
+    for(int i = 1; i <= n; i++){
+        for(int j = capacidade; j >= 0; j--){
+            Vi[j] = (peso[i-1] > j) ? Vi[j] : max(Vi[j], Vi[j - peso[i-1]] + valor[i-1]);
+        }
+    }
+
+    return Vi[capacidade];
+
+}
+
+int knapsackMatriz(int capacidade, int peso[], int valor[], int n){
+
+    int V[n + 1][capacidade + 1];
+
+    for(int i = 0; i <= n; i++){
+        for(int j = 0; j <= capacidade; j++){
+            if(i == 0 || j == 0){
+                V[i][j] = 0;
+            } else if(peso[i-1] <= j){
+                V[i][j] = max(V[i-1][j], V[i-1][j - peso[i-1]] + valor[i-1]);
+            } else {
+                V[i][j] = V[i-1][j];
+            }
+        }
+    }
+
+    return V[n][capacidade];
+
+}
+
+int CoinChange(int troco, int moedas[], int n){
+    int tabela[troco + 1];
+    tabela[0] = 0;
+
+    for(int i = 1; i <= troco; i++){
+        tabela[i] = 10000000;
+    }
+
+    for(int i = 1; i <= troco; i++){
+        for(int j = 0; j < n; j++){
+            if(moedas[j] <= i){
+                int aux = tabela[i - moedas[j]];
+                if(aux != 10000000 && aux + 1 < tabela[i]){
+                    tabela[i] = aux + 1;
+                }
+            }
+        }
+    }
+
+    return tabela[troco];
+
+}
+
+
+/*Closest pair of points*/
+// A structure to represent a Point in 2D plane
+struct Point
+{
+    double x, y;
+};
+
+/* Following two functions are needed for library function qsort().
+   Refer: http://www.cplusplus.com/reference/clibrary/cstdlib/qsort/ */
+
+// Needed to sort array of points according to X coordinate
+int compareX(const void* a, const void* b)
+{
+    Point *p1 = (Point *)a,  *p2 = (Point *)b;
+    return (p1->x - p2->x);
+}
+// Needed to sort array of points according to Y coordinate
+int compareY(const void* a, const void* b)
+{
+    Point *p1 = (Point *)a,   *p2 = (Point *)b;
+    return (p1->y - p2->y);
+}
+
+// A utility function to find the distance between two points
+double dist(Point p1, Point p2)
+{
+    return sqrt( (p1.x - p2.x)*(p1.x - p2.x) +
+                 (p1.y - p2.y)*(p1.y - p2.y)
+               );
+}
+
+// A Brute Force method to return the smallest distance between two points
+// in P[] of size n
+double bruteForce(Point P[], int n)
+{
+    double min = 2000000000;
+    for (int i = 0; i < n; ++i)
+        for (int j = i+1; j < n; ++j)
+            if (dist(P[i], P[j]) < min)
+                min = dist(P[i], P[j]);
+    return min;
+}
+
+// A utility function to find minimum of two double values
+double min(double x, double y)
+{
+    return (x < y)? x : y;
+}
+
+
+// A utility function to find the distance beween the closest points of
+// strip of given size. All points in strip[] are sorted accordint to
+// y coordinate. They all have an upper bound on minimum distance as d.
+// Note that this method seems to be a O(n^2) method, but it's a O(n)
+// method as the inner loop runs at most 6 times
+double stripClosest(Point strip[], int size, double d)
+{
+    double min = d;  // Initialize the minimum distance as d
+
+    qsort(strip, size, sizeof(Point), compareY);
+
+    // Pick all points one by one and try the next points till the difference
+    // between y coordinates is smaller than d.
+    // This is a proven fact that this loop runs at most 6 times
+    for (int i = 0; i < size; ++i)
+        for (int j = i+1; j < size && (strip[j].y - strip[i].y) < min; ++j)
+            if (dist(strip[i],strip[j]) < min)
+                min = dist(strip[i], strip[j]);
+
+    return min;
+}
+
+// A recursive function to find the smallest distance. The array P contains
+// all points sorted according to x coordinate
+double closestUtil(Point P[], int n)
+{
+    // If there are 2 or 3 points, then use brute force
+    if (n <= 3)
+        return bruteForce(P, n);
+
+    // Find the middle point
+    int mid = n/2;
+    Point midPoint = P[mid];
+
+    // Consider the vertical line passing through the middle point
+    // calculate the smallest distance dl on left of middle point and
+    // dr on right side
+    double dl = closestUtil(P, mid);
+    double dr = closestUtil(P + mid, n-mid);
+
+    // Find the smaller of two distances
+    double d = min(dl, dr);
+
+    // Build an array strip[] that contains points close (closer than d)
+    // to the line passing through the middle point
+    Point strip[n];
+    int j = 0;
+    for (int i = 0; i < n; i++)
+        if (abs(P[i].x - midPoint.x) < d)
+            strip[j] = P[i], j++;
+
+    // Find the closest points in strip.  Return the minimum of d and closest
+    // distance is strip[]
+    return min(d, stripClosest(strip, j, d) );
+}
+
+// The main functin that finds the smallest distance
+// This method mainly uses closestUtil()
+double closest(Point P[], int n)
+{
+    qsort(P, n, sizeof(Point), compareX);
+
+    // Use recursive function closestUtil() to find the smallest distance
+    return closestUtil(P, n);
+}
+
+
+
+int main() {
+
+    /*Função para achar a menor distancia entre dois pontos em O(NlogN)*/
+    /*http://www.geeksforgeeks.org/closest-pair-of-points/*/
+    /*Site de onde retirei o código*/
+    
+    return 0;
+}
