@@ -1,0 +1,95 @@
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+struct node {
+    char value;
+    node* right;
+    node* left;
+};
+
+node* root = NULL;
+
+void printPos(node* root){
+    if(root){
+     printPos(root -> left);
+     printPos(root -> right);
+     cout << root -> value;
+    }
+}
+
+node* buildTree(vector<char> pre, vector<char> in, int n){
+    if(n == 0){
+        return NULL;
+    }
+
+    if(n == 1){
+        node* new_node = new node;
+        new_node -> value = pre[0];
+        new_node -> left = NULL;
+        new_node -> right = NULL;
+        return new_node;
+    }
+
+    vector<char> preL, inL, preR, inR;
+
+    int pos;
+
+    for(int i = 0; i < n; i++){
+        if(in[i] == pre[0]){
+            pos = i;
+            break;
+        } else {
+            inL.push_back(in[i]);
+        }
+    }
+
+    int p = 0;
+    int k = 0;
+
+    for(int i = 1; i < n; i++){
+        if(i > pos){
+            inR.push_back(in[i]);
+            p++;
+        }
+        if(i <= pos){
+            preL.push_back(pre[i]);
+        } else {
+            preR.push_back(pre[i]);
+        }
+    }
+
+
+    node* new_node = new node;
+    new_node -> value = pre[0];
+    if(inL.empty()){
+        new_node -> left = NULL;
+    } else {
+        new_node -> left = buildTree(preL, inL, preL.size());
+    }
+    if(inR.empty()){
+        new_node -> right = NULL;
+    } else {
+        new_node -> right = buildTree(preR, inR, preR.size());
+    }
+    return new_node;
+
+}
+
+void removeTree(node* root){
+    if(root){
+        removeTree(root -> left);
+        removeTree(root -> right);
+        free(root);
+    }
+}
+
+int main(){
+
+    /*Algoritmo para construir uma árvore binária a partir da sua sequência Infixa e Prefixa */
+
+    return 0;
+}
