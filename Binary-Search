@@ -1,0 +1,49 @@
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <iostream>
+#include <map>
+#include <string>
+#include <set>
+#include <sstream>
+#include <queue>
+#include <utility>
+#include <algorithm>
+
+#define INF 100000000
+
+using namespace std;
+
+bool achou = false;
+
+int binarySearch(vector<int> vet, int k){
+
+    int L = 0, R = vet.size();
+    int mid;
+
+    int cont = 0;
+
+    while(L <= R && cont < 50){
+        mid = (L+R)/2;
+        if(vet[mid] == k){
+            achou = true;
+            break;
+        }
+        if(vet[mid] > k){
+            R = mid - 1;
+        } else {
+            L = mid + 1;
+        }
+        cont++;
+    }
+
+    return mid;
+
+}
+
+int main(){
+    
+    /*Algoritmo de busca binária para encontrar um elemento de um vector*/
+
+    return 0;
+}
