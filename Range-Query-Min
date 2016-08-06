@@ -1,0 +1,51 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <vector>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+
+#define INF 100000000
+
+using namespace std;
+
+void constructTree(int vet[], int tree[], int low, int high, int pos){
+    if(low == high){
+        tree[pos] = vet[low];
+        return;
+    }
+    int mid = (low + high)/2;
+    constructTree(vet, tree, low, mid, 2*pos + 1);
+    constructTree(vet, tree, mid+1, high, 2*pos + 2);
+    tree[pos] = min(tree[2*pos + 1], tree[2*pos + 2]);
+}
+
+int rangeQuery(int tree[], int qlow, int qhigh, int low, int high, int pos){
+    if(qlow <= low && qhigh >= high){
+        return tree[pos];
+    }
+    if(qlow > high || qhigh < low){
+        return INF;
+    }
+    int mid = (low + high)/2;
+    return min(rangeQuery(tree, qlow, qhigh, low, mid, 2*pos + 1), rangeQuery(tree, qlow, qhigh, mid + 1, high, 2*pos + 2));
+}
+
+int main(){
+
+    int vet[] = {-1, 2, 4, 0, 6};
+
+    int n = sizeof(vet)/sizeof(vet[0]);
+
+    int x = (int)(ceil(log2(n)));
+    int treeSize = 2*(int)pow(2, x) - 1;
+
+    int tree[treeSize];
+
+    constructTree(vet, tree, 0, 3, 0);
+
+    cout << rangeQuery(tree, 0, 4, 0, 4, 0) << endl;
+
+    return 0;
+}
