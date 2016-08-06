@@ -1,0 +1,73 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <vector>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+
+#define INF 100000000
+
+using namespace std;
+
+void constructSumTree(int vet[], int tree[], int low, int high, int pos){
+    if(low == high){
+        tree[pos] = vet[low];
+        return;
+    }
+    int mid = (low+high)/2;
+    constructSumTree(vet, tree, low, mid, 2*pos + 1);
+    constructSumTree(vet, tree, mid + 1, high, 2*pos + 2);
+    tree[pos] = tree[2*pos+1] + tree[2*pos+2];
+}
+
+int rangeQuerySum(int tree[], int qlow, int qhigh, int low, int high, int pos){
+    if(qlow <= low && qhigh >= high){
+        return tree[pos];
+    }
+    if(qlow > high || qhigh < low){
+        return 0;
+    }
+    int mid = (low + high)/2;
+    return rangeQuerySum(tree, qlow, qhigh, low, mid, 2*pos + 1) + rangeQuerySum(tree, qlow, qhigh, mid + 1, high, 2*pos + 2);
+}
+
+void updateTree(int tree[], int posTree, int upd, int low, int high, int pos){
+    if(low == pos){
+        tree[posTree] = tree[posTree] + upd;
+        return;
+    }
+    if(low > pos || high < pos){
+        return;
+    }
+    int mid = (low + high)/2;
+    updateTree(tree, 2*posTree + 1, upd, low, mid, pos);
+    updateTree(tree, 2*posTree + 2, upd, mid + 1, high, pos);
+    tree[posTree] = tree[2*posTree + 1] + tree[2*posTree + 2];
+}
+
+int main(){
+
+    int vet[] = {-1, 2, 4, 0, 6};
+
+    int n = sizeof(vet)/sizeof(vet[0]);
+
+    int x = (int)(ceil(log2(n)));
+    int treeSize = 2*(int)pow(2, x) - 1;
+
+    int tree[treeSize];
+
+    constructSumTree(vet, tree, 0, n - 1, 0);
+
+    for(int i = 0; i < treeSize; i++){
+        cout << tree[i] << " ";
+    } cout << endl << endl;
+
+    updateTree(tree, 0, 3, 0, 4, 2);
+
+    for(int i = 0; i < treeSize; i++){
+        cout << tree[i] << " ";
+    } cout << endl;
+
+    return 0;
+}
