@@ -38,46 +38,6 @@ void Union(sub subset[], int x, int y){
 
 }
 
-int main(){#include <iostream>
-#include <vector>
-#include <stack>
-#include <utility>
-#include <algorithm>
-#include <set>
-#include <cstdio>
-#include <cstdlib>
-
-#define INF 100000000
-
-using namespace std;
-
-struct sub {
-    int parent;
-    int rank;
-};
-
-int find(sub subset[], int v){
-    if(subset[v].parent != v){
-        subset[v].parent = find(subset, subset[v].parent);
-    }
-    return subset[v].parent;
-}
-
-void Union(sub subset[], int x, int y){
-    int v1_set = find(subset, x);
-    int v2_set = find(subset, y);
-
-    if(subset[v1_set].rank < subset[v2_set].rank){
-        subset[v1_set].parent = v2_set;
-    } else if(subset[v1_set].rank > subset[v2_set].rank){
-        subset[v2_set].parent = v1_set;
-    } else {
-        subset[v2_set].parent = v1_set;
-        subset[v1_set].rank++;
-    }
-
-}
-
 int main(){ 
   
   /*Algoritmo de Union-Find com mecanismo de rank, o que melhora signficamente o desempenho do algoritmo*/
