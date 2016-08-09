@@ -27,7 +27,7 @@ void inicializar(int quantE){
     }
 }
 
-void BFS(map<int, vector<int> > adj, int O, map<pair<int, int>, int> custo){
+void Dijkstra(map<int, vector<int> > adj, int O, map<pair<int, int>, int> custo){
     priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > fila;
     fila.push(make_pair(0, O));
     dist[O] = 0;
@@ -37,15 +37,10 @@ void BFS(map<int, vector<int> > adj, int O, map<pair<int, int>, int> custo){
         fila.pop();
         int daVez = t.second;
         for(int i = 0; i < adj[daVez].size(); i++){
-            if(dist[adj[daVez][i]] == INF){
+            if(dist[daVez] + custo[make_pair(daVez, adj[daVez][i])] < dist[adj[daVez][i]]){
                 dist[adj[daVez][i]] = dist[daVez] + custo[make_pair(daVez, adj[daVez][i])];
                 seq[adj[daVez][i]] = daVez;
                 fila.push(make_pair(dist[adj[daVez][i]], adj[daVez][i]));
-            } else {
-                if(dist[daVez] + custo[make_pair(daVez, adj[daVez][i])] < dist[adj[daVez][i]]){
-                    dist[adj[daVez][i]] = dist[daVez] + custo[make_pair(daVez, adj[daVez][i])];
-                    seq[adj[daVez][i]] = daVez;
-                }
             }
         }
     }
@@ -75,7 +70,7 @@ int main(){
     cout << "Digite a origem: " << endl;
     cin >> O;
 
-    BFS(adj, O, custo);
+    Dijkstra(adj, O, custo);
 
     cout << "Digite um destino: " << endl;
     int D;
