@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+#define INF 0x3f3f3f3f
+#define WHITE 0
+#define GRAY 1
+#define BLACK 2
+#define endl '\n'
+
+using namespace std;
+
+int n;
+
+int maxSeq(vector<int> &vet){
+    vector<int> aux(n + 1, 1);
+
+    int maxi = 1;
+
+    for(int i = 1; i < n; i++){
+        for(int j = 0; j < i; j++){
+            if(vet[i] > vet[j]){
+                aux[i] = max(aux[i], aux[j] + 1);
+                maxi = max(maxi, aux[i]);
+            }
+        }
+    }
+    return maxi;
+}
+
+int main(int argc, char const *argv[]){
+    ios_base::sync_with_stdio(false);
+
+    cin >> n;
+    vector<int> vet(n + 1);
+
+    for(int i = 0; i < n; i++){
+        cin >> vet[i];
+    }
+
+    cout << maxSeq(vet) << endl;
+
+	return 0;
+}
