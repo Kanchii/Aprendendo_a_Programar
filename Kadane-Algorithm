@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+
+#define INF 0x3f3f3f3f
+#define WHITE 0
+#define GRAY 1
+#define BLACK 2
+#define endl '\n'
+
+using namespace std;
+
+int n;
+
+void Kadane(vector<int> &vet, int &x, int &y, int &max_total){
+    int max_atual = 0;
+    max_total = -1;
+    int temp = 0;
+
+    for(int i = 0; i < n; i++){
+        max_atual = max_atual + vet[i];
+        if(max_atual < 0){
+            max_atual = 0;
+            temp = i + 1;
+        }
+        if(max_atual >= max_total){
+            max_total = max_atual;
+            x = temp;
+            y = i;
+        }
+    }
+
+}
+
+int main(int argc, char const *argv[]){
+    ios_base::sync_with_stdio(false);
+    while(cin >> n, n){
+        vector<int> vet;
+        int x, y;
+        for(int i = 0; i < n; i++){
+            cin >> x >> y;
+            vet.push_back(x - y);
+        }
+        int max;
+        Kadane(vet, x, y, max);
+        cout << "Maior intervalo que maximiza a soma do vetor: " << x << " " << y << " e a soma eh: " << max << endl;
+        
+    }
+
+	return 0;
+}
