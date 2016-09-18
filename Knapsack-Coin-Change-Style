@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+
+#define INF 0x3f3f3f3f
+#define endl '\n'
+
+using namespace std;
+
+int knapsack_Coin_Change_Style(int capacidade, int peso[], int valor[], int n){
+  int V[capacidade + 1];
+  for(int i = 0; i <= capacidade; i++){
+    V[i] = 0;
+  }
+  
+  for(int i = 1; i <= capacidade; i++){
+    for(int j = 0; j < n; j++){
+      if(i >= peso[j]){
+        V[i] = max(V[i], V[i - peso[j]] + valor[j]);
+    }
+  }
+  
+  return V[capacidade];
+  
+}
+
+int main(){
+
+  //Uma mochila 0-1 no estilo de um Coin Change
+
+  return 0;
+}
