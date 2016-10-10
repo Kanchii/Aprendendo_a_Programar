@@ -1,0 +1,103 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <vector>
+#include <cstdlib>
+#include <cstdio>
+#include <utility>
+#include <string>
+#include <map>
+#include <algorithm>
+
+#define INF 0x3f3f3f3f
+#define endl '\n'
+
+using namespace std;
+
+void buildTree(int *tree, int *vet, int menor, int maior, int pos){
+	if(menor == maior){
+		tree[pos] = vet[menor];
+		return;
+	}
+
+	int mid = (maior + menor)/2;
+	buildTree(tree, vet, menor, mid, 2*pos + 1);
+	buildTree(tree, vet, mid + 1, maior, 2*pos + 2);
+	tree[pos] = tree[2*pos + 1] + tree[2*pos + 2];
+}
+
+void updateTree(int *tree, int *lazy, int menor, int maior, int indexMenor, int indexMaior, int pos, int value){
+	if(lazy[pos] != 0){
+		tree[pos] += (maior - menor + 1)*lazy[pos];
+		if(maior != menor){
+			lazy[2*pos + 1] += lazy[pos];
+			lazy[2*pos + 2] += lazy[pos];
+		}
+		lazy[pos] = 0;
+	}
+
+	if(indexMenor > maior || indexMaior < menor){
+		return;
+	}
+	if(indexMenor <= menor && indexMaior >= maior){
+		tree[pos] += (maior - menor + 1)*value;
+		if(maior != menor){
+			lazy[2*pos + 1] += value;
+			lazy[2*pos + 2] += value;
+		}
+		return;
+	}
+	int mid = (maior + menor)/2;
+	updateTree(tree, lazy, menor, mid, indexMenor, indexMaior, 2*pos + 1, value);
+	updateTree(tree, lazy, mid + 1, maior, indexMenor, indexMaior, 2*pos + 2, value);
+	tree[pos] = tree[2*pos + 1] + tree[2*pos + 2];
+}
+
+int getSum(int *tree, int *lazy, int menor, int maior, int indexMenor, int indexMaior, int pos){
+	if(lazy[pos] != 0){
+		tree[pos] += (maior - menor + 1)*lazy[pos];
+		if(maior != menor){
+			lazy[2*pos + 1] += lazy[pos];
+			lazy[2*pos + 2] += lazy[pos];
+		}
+		lazy[pos] = 0;
+	}
+
+	if(indexMenor > maior || indexMaior < menor){
+		return 0;
+	}
+	if(indexMenor <= menor && indexMaior >= maior){
+		return tree[pos];
+	}
+	int mid = (maior + menor)/2;
+	return getSum(tree, lazy, menor, mid, indexMenor, indexMaior, 2*pos + 1) + getSum(tree, lazy, mid + 1, maior, indexMenor, indexMaior, 2*pos + 2);
+
+}
+
+int main(){
+	int n;
+	cin >> n;
+	int *vet = new int[n + 1];
+	for(int i = 0; i < n; i++){
+		cin >> vet[i];
+	}
+
+	int x = (int)ceil(log2(n));
+	int treeSize = 2*(int)pow(2, x) - 1;
+	int *tree = new int[treeSize + 1];
+	int *lazy = new int[treeSize + 1];
+
+	for(int i = 0; i < treeSize; i++){
+		lazy[i] = 0;
+	}
+
+	buildTree(tree, vet, 0, n - 1, 0);
+	cout << getSum(tree, lazy, 0, n - 1, 1, 3, 0) << endl;
+	updateTree(tree, lazy, 0, n - 1, 1, 3, 0, 5);
+	cout << getSum(tree, lazy, 0, n - 1, 1, 3, 0) << endl;
+
+	free(vet);
+	free(lazy);
+	free(tree);
+    return 0;
+}
