@@ -1,0 +1,41 @@
+#include <cmath>
+#include <stack>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <string.h>
+#include <map>
+
+using namespace std;
+
+#define INF 0x3f3f3f3f
+#define MAX 1000001
+
+long long int sum[MAX];
+long long int rangeSum[MAX];
+void crivoDaSoma(){
+	memset(sum, 0, sizeof(sum));
+	memset(rangeSum, 0, sizeof(rangeSum));
+	for(int i = 1; i < MAX; i++){
+		sum[i] += i;
+		rangeSum[i] = sum[i] + rangeSum[i-1];
+		for(int j = i + i; j < MAX; j += i){
+			sum[j] += i;
+		}
+	}
+}
+
+int main(){
+	int n;
+	crivoDaSoma();
+	
+	while(cin >> n && n){
+		cout << rangeSum[n] << endl;
+
+	}
+
+    return 0;
+}
