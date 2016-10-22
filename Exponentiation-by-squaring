@@ -1,0 +1,52 @@
+#include <cmath>
+#include <stack>
+#include <cstdio>
+#include <vector>
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <iomanip>
+#include <string.h>
+#include <map>
+
+#define INF 0x3f3f3f3f
+#define MAX 100005
+
+using namespace std;
+
+typedef unsigned long long int ull;
+typedef long long int ll;
+typedef vector<vector<int> > vvi;
+typedef pair<int, int> pii;
+typedef vector<vector<pair<int, int> > > vvpii;
+
+bool primos[MAX];
+
+ll exponbysquaring(ll a, ll b){
+	ll res = 1;
+	while(b > 0){
+		if(b % 2 == 1){
+			res *= a;
+			b--;
+		}
+		a *= a;
+		b /= 2;
+	}
+	return res;
+}
+
+int main(){
+
+	cout << exponbysquaring(2, 3) << endl;
+	cout << exponbysquaring(2, 12) << endl;
+	cout << exponbysquaring(5, 5) << endl;
+	cout << exponbysquaring(10, 5) << endl;
+	cout << exponbysquaring(7, 8) << endl;
+	cout << exponbysquaring(4, 2) << endl;
+	cout << exponbysquaring(2, 0) << endl;
+	cout << exponbysquaring(6, 10) << endl;
+
+    return 0;
+}
