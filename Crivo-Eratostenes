@@ -1,0 +1,56 @@
+#include <cmath>
+#include <stack>
+#include <cstdio>
+#include <vector>
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <iomanip>
+#include <string.h>
+#include <map>
+
+#define INF 0x3f3f3f3f
+#define MAX 100005
+
+using namespace std;
+
+typedef unsigned long long int ull;
+typedef long long int ll;
+typedef vector<vector<int> > vvi;
+typedef pair<int, int> pii;
+typedef vector<vector<pair<int, int> > > vvpii;
+
+bool primos[MAX];
+
+void crivo(){
+	primos[2] = true;
+	for(int i = 4; i <= MAX; i += 2){
+		primos[i] = false;
+	}
+	for(int i = 3; i <= MAX; i += 2){
+		if(primos[i]){
+			for(int j = i + i; j <= MAX; j += i){
+				primos[j] = false;
+			}
+		}
+	}
+}
+
+int main(){
+
+	memset(primos, true, sizeof(primos));
+	crivo();
+
+	printf("3 %s\n", primos[3] ? "eh primo" : "nao eh primo");
+	printf("6 %s\n", primos[6] ? "eh primo" : "nao eh primo");
+	printf("123 %s\n", primos[123] ? "eh primo" : "nao eh primo");
+	printf("14783 %s\n", primos[14783] ? "eh primo" : "nao eh primo");
+	printf("11 %s\n", primos[11] ? "eh primo" : "nao eh primo");
+	printf("17 %s\n", primos[17] ? "eh primo" : "nao eh primo");
+	printf("33 %s\n", primos[33] ? "eh primo" : "nao eh primo");
+	printf("100 %s\n", primos[100] ? "eh primo" : "nao eh primo");
+
+    return 0;
+}
