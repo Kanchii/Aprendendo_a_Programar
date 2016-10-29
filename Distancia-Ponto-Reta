@@ -1,0 +1,79 @@
+#include <iostream>
+#include <cmath>
+#include <queue>
+#include <vector>
+#include <map>
+#include <cctype>
+#include <iomanip>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+#include <string.h>
+#include <stack>
+#include <list>
+#include <algorithm>
+#include <utility>
+
+
+using namespace std;
+
+#define INF 0x3f3f3f3f
+#define MAX 10500
+#define min(a,b) ((a) < (b) ? (a) : (b))
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define mp(a,b) (make_pair(a,b))
+
+typedef unsigned long long int ull;
+typedef long long int ll;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+double x[105], y[105];
+
+inline double dist(double res, double a){
+	return (abs(res)/(sqrt(a*a + 1)));
+}
+
+int main(int argc, char const *argv[]){
+
+	int n;
+
+	printf("Digite o numero de pontos:\n");
+	while(scanf("%d", &n), n){
+		getchar();
+		printf("Digite as coordenadas dos pontos x e y\n");    //Dados vários pontos, é formado todas as retas possíveis e dado
+		for(int i = 0; i < n; i++){                            //as distâncias de todos os pontos até a reta em questão
+			scanf("%lf %lf", &x[i], &y[i]);
+			getchar();
+		}
+
+		bool retaV = false;
+		for(int i = 0; i < n; i++){
+			for(int j = i + 1; j < n; j++){
+				double m;
+				if(x[j] != x[i]){
+					m = (y[j] - y[i])/(x[j] - x[i]);
+				} else {
+					retaV = true;
+				}
+				cout << "reta formada por x1: " << x[i] << " y1: " << y[i] << "    x2: " << x[j] << " y2: " << y[j] << endl;
+				for(int k = 0; k < n; k++){
+					if(!retaV){				
+						double res = y[k] - y[i] - m*(x[k] - x[i]);				        
+				        cout << "Distancia ateh o ponto x: " << x[k] << " y: " << y[k] << " eh -> " << dist(res, -m); 
+					} else {						
+            			cout << "Distancia ateh o ponto x: " << x[k] << " y: " << y[k] << " eh -> " << abs(x[k] - x[i]);
+					}
+					getchar();
+				}
+				retaV = false;
+				cout << endl;
+			}
+		}
+	}
+
+	return 0;
+}
