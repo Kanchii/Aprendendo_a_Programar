@@ -1,2 +1,4 @@
-# Learning-some-graphs
-That's my repository where I'll place some graphs codes that I implemented during my vacation!
+# Aprendendo-a-Programar
+Eu não manjo nada de git, mas colocarei neste repositório tudo aquilo que eu for aprendendo de novo e que eu julgar necessário guardar para estudos futuros :D
+
+PS: Se tiver algo em ingês, não me julge, to aprendendo também e.e
