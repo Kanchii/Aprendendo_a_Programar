@@ -1,0 +1,49 @@
+#include <iostream>
+#include <cmath>
+#include <queue>
+#include <vector>
+#include <map>
+#include <cctype>
+#include <iomanip>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+#include <string.h>
+#include <stack>
+#include <list>
+#include <algorithm>
+#include <utility>
+
+using namespace std;
+
+#define INF 0x3f3f3f3f
+#define MAX 1500
+#define MOD 1000000007
+#define ALPHABETIC_SIZE 30
+#define min(a,b) ((a) < (b) ? (a) : (b))
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define mp(a,b) (make_pair(a,b))
+
+typedef unsigned long long int ull;
+typedef long long int ll;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+struct Order {
+	bool operator()(pii const &a, pii const &b) {       //Struct para ordenar uma priority_queue de pair<int, int> de maneira
+		if(a.first == b.first){                           //que o .first do pair é ordenado pelo menor assim como o .second
+			return a.second > b.second;
+		}
+		return a.first > b.first;
+	}
+};
+
+int main(int argc, char const *argv[]){
+	
+
+	return 0;
+}
+
