@@ -1,0 +1,86 @@
+#include <iostream>
+#include <cmath>
+#include <queue>
+#include <set>
+#include <vector>
+#include <map>
+#include <cctype>
+#include <iomanip>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+#include <string.h>
+#include <stack>
+#include <list>
+#include <algorithm>
+#include <utility>
+
+using namespace std;
+
+#define INF 0x3f3f3f3f
+#define MAX 3000100
+#define MOD 1000000009
+#define ALPHABETIC_SIZE 30
+#define endl '\n'
+#define min(a,b) ((a) < (b) ? (a) : (b))
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define mp(a,b) make_pair(a,b)
+
+typedef unsigned long long int ull;
+typedef unsigned int ui;
+typedef long long int lld;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+bool primos[MAX];
+int prime[MAX];
+int cont = 1;
+
+void crivo(){
+	memset(primos, true, sizeof(primos));       //Aplicando o Crivo de Erastóstenes para encontrar de maneira eficiente os primos
+	prime[0] = 2;                               //de 2 até MAX. O MAX é definido como sqrt(LIMIT), onde LIMIT seria o maior numero
+	for(int i = 4; i < MAX; i += 2){            //sendo considerado no problema. EX: se LIMIT = 10000, entao MAX = 100.
+		primos[i] = false;
+	}
+	for(int i = 3; i < MAX; i += 2){
+		if(primos[i]){
+			prime[cont++] = i;
+			for(int j = 2*i; j < MAX; j += i){
+				primos[j] = false;
+			}
+		}
+	}
+}
+
+lld fatorar(lld n){         //Fazendo-se a fatoração do numero N
+	lld res = 1;
+	for(ui i = 0; i < cont && n > 1; i++){
+		int t = 0;
+		if(n%prime[i] == 0){
+			while(n%prime[i] == 0 && n > 1){
+				t++;                                                  //Para se saber a quantidade de formas distintas de se escrever
+				n /= prime[i];                                        //um numero como um sequencia consecutiva de outros numeros basta
+			}                                                       //fatorar o numero da forma (2^a)*(3^b)*(5^c)*...*(n^p)
+			if(i > 0){                                              //onde n é o e-nésimo primo e p é o n-ésimo primo elevado a p
+				res *= (t + 1);                                       //agora para achar o numero k de vezes que um numero T pode ser 
+			}                                                       //escrito como soma consecutiva é usado a seguinte formula:
+		}                                                         //k = (b + 1)*(c + 1)*(d + 1)*...*(p + 1)
+	}                                                           //O a, que seria a potencia do 2 é desconsiderado.
+	if(n > 1){
+		res *= 2;
+	}
+	return res;
+}
+
+int main(int argc, char const *argv[]){
+	ios_base::sync_with_stdio(false);
+	lld n;
+	crivo();
+	while(cin >> n){
+		 cout << fatorar(n) << endl;
+	}
+	return 0;
+}
