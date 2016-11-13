@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef unsigned long long int ull;
+typedef long long int lld;
+typedef unsigned int ui;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int,int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+#define INF 0x3f3f3f3f
+#define MAX 1000100
+#define MOD 1000000000
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define min(a,b) ((a) < (b) ? (a) : (b)) 
+#define mp(a,b) (make_pair(a,b))
+#define fri(a,b) for(int i = a; i < (int)b; i++)
+#define frj(a,b) for(int j = a; j < (int)b; j++)
+#define frk(a,b) for(int k = a; k < (int)b; k++)
+#define frInverso(a,b) for(int i = a; i > (int)b; i--)
+
+void pre(int *LPS, string pat){
+	int i = 1, j = 0;
+	LPS[0] = 0;
+	while(i < (int)pat.size()){
+		if(pat[i] == pat[j]){
+			j++;
+			LPS[i++] = j;
+		} else {
+			if(j != 0){
+				j = LPS[j - 1];
+			} else {
+				LPS[i++] = 0;
+			}
+		}
+	}
+}
+
+
+
+void KMP(string text, string pat, int *LPS){
+	int i, j;
+	i = j = 0;
+	int N = text.size(), M = pat.size();
+	while(i < N){
+		if(pat[j] == text[i]){
+			i++;
+			j++;
+		}
+		if(j == M){
+			printf("Found pattern at index %d\n", i - j);
+			j = LPS[j - 1];
+		} else if(i < N && pat[j] != text[i]){
+			if(j != 0){
+				j = LPS[j - 1];
+			} else {
+				i++;
+			}
+		}
+	}
+}
+int main(int argc, char const *argv[]){
+	//ios_base::sync_with_stdio(false);	
+
+	string text = "babaaabababbbabbababbbbabaabbabbbaa";
+	string pat = "bbba";
+
+	cout << "Text: " << text << endl << "Pattern: " << pat << endl << endl;
+
+	int LPS[pat.size() + 1];
+
+	pre(LPS, pat);	
+	KMP(text, pat, LPS);
+
+	return 0;
+}
