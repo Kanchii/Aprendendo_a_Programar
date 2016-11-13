@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef unsigned long long int ull;
+typedef long long int lld;
+typedef unsigned int ui;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int,int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+#define INF 0x3f3f3f3f
+#define MAX 1000100
+#define MOD 100000
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define min(a,b) ((a) < (b) ? (a) : (b)) 
+#define mp(a,b) (make_pair(a,b))
+#define fri(a,b) for(int i = a; i < (int)b; i++)
+#define frj(a,b) for(int j = a; j < (int)b; j++)
+#define frk(a,b) for(int k = a; k < (int)b; k++)
+#define frInverso(a,b) for(int i = a; i > (int)b; i--)
+
+int F[MAX];
+
+void init(){
+	F[0] = 1;
+	F[1] = 1;
+	F[2] = 2;
+	F[3] = 6;
+	ull res = 6;
+	for(int i = 4; i <= 1000000; i++){
+		res *= i;
+		while(!(res%10)){ //Retirando todos os zeros a direita do número
+			res /= 10;
+		}
+		res %= MOD;    //Usando MOD = 100000, pois para um N <= 1000000, guardar os 5 últimos digitos é necessário para a conta
+		F[i] = res%10; //Guardando o último digito de todos os fatoriais até um M <= N para usar futuramente
+	}
+}
+
+int main(int argc, char const *argv[]){
+	//ios_base::sync_with_stdio(false);	
+	int a;
+	int cont = 1;
+	init();     //Inicializando o vetor que contém o último digito de todos os fatoriais de 0 até 1000000
+	while(scanf("%d", &a) != EOF){		
+		printf("Instancia %d\n%d\n\n", cont++, F[a]);
+	}
+  
+	return 0;
+}
