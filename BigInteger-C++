@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define INF 0x3f3f3f3f
+#define MAX 100000
+#define MOD 10000
+#define ALPHABETIC_SIZE 30
+#define endl '\n'
+#define min(a,b) ((a) < (b) ? (a) : (b))
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define mp(a,b) make_pair(a,b)
+#define mult(x) ((x) * (x))
+
+typedef unsigned long long int ull;
+typedef unsigned int ui;
+typedef long long int ll;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+int vet[MAX];
+int tamVet;
+
+void multiply(int x){
+	int carry = 0;
+
+	for(int i = 0; i < tamVet; i++){
+		int prod = vet[i] * x + carry;
+		vet[i] = prod % 10;
+		carry = prod / 10;
+	}
+
+	while(carry){
+		vet[tamVet] = carry % 10;
+		carry /= 10;
+		tamVet++;
+	}
+}
+
+void fatorial(int n){
+	vet[0] = 1;
+	tamVet = 1;
+
+	for(int i = 2; i <= n; i++){
+		multiply(i);
+	}
+
+	for(int i = tamVet - 1; i >= 0; i--){
+		cout << vet[i];
+	} cout << endl;
+}
+
+int main(int argc, char const *argv[]){
+
+	int n = 1231;
+	fatorial(n);
+
+	return 0;
+}
+
