@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+
+#define INF 0x3f3f3f3f
+#define MAX 50005
+#define all(x) (x.begin(), x.end())
+#define mp(x, y) (make_pair(x, y))
+#define endl '\n'
+
+using namespace std;
+
+typedef long long ll;
+typedef unsigned long long ull;
+typedef vector<int> vi;
+typedef vector<vi> vii;
+typedef pair<int, int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+int main() {
+	//ios_base::sync_with_stdio(false);
+	int v1, v2, at, d;
+  //v1 = qtd inicial do jogador 1, v2 = qtd inicial do jogador 2, at = divisor (exemplo, se no jogo for usado um dado
+  //então se at = 3, ambos os jogadores tem a mesma chance de ganhar, se at = 4, o jogador 1 terá 4 / 6 de chance de ganhar
+  //enquanto que o jogador 2 terá 2 / 6 de chance de ganhar), d = quanto que cada jogador ganha por vitoria
+  
+	while(cin >> v1 >> v2 >> at >> d && (v1 or v2 or at or d)){
+
+		double prob;
+
+		if(at == 3){
+			double n1 = ceil((double)v1 / (double)d);
+			double n2 = ceil((double)v2 / (double)d);
+			prob = (double)n1/(double)(n1 + n2);
+		} else {
+			double p = at / 6.0;
+			double q = 1.0 - p;
+			double n1 = ceil((double)v1 / (double)d);
+			double n2 = ceil((double)v2 / (double)d);
+			prob = (1.0 - pow(q / p, n1)) / (1.0 - pow(q / p, n1 + n2));
+		}
+
+		printf("%.1f\n", prob*100.0);
+
+	}
+
+    return 0;
+}
