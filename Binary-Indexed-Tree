@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+
+#define INF 0x3f3f3f3f
+#define MAX 50005
+#define all(x) (x.begin(), x.end())
+#define mp(x, y) (make_pair(x, y))
+#define endl '\n'
+#define max(a, b) ((a) > (b) ? (a) : (b))
+
+using namespace std;
+
+typedef long long ll;
+typedef unsigned long long ull;
+typedef vector<int> vi;
+typedef vector<vi> vii;
+typedef pair<int, int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+void createBIT(int *bit, int *vet, int n){
+	for(int i = 0; i < n - 1; i++){
+		int daVez = vet[i];
+		for(int j = i + 1; j < n; j += (j & -j)){
+			bit[j] += daVez;
+		}
+	}
+}
+
+int getSum(int *bit, int index, int n){
+	int res = 0;
+	for(int i = index + 1; i > 0; i -= (i & -i)){
+		res += bit[i];
+	}
+	return res;
+}
+
+void updateBIT(int *bit, int *vet, int index, int value, int n){
+	int diff = value - vet[index];
+	for(int i = index + 1; i < n; i += (i & -i)){
+		bit[i] += diff;
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	int n;
+	cin >> n;
+	int tamBIT = n + 1;
+	int *vet = new int[10];
+	for(int i = 0; i < 10; i++){
+		cin >> vet[i];
+	}
+
+	int bit[tamBIT];
+	memset(bit, 0, sizeof(bit));
+
+	createBIT(bit, vet, tamBIT);
+	cout << getSum(bit, 7, tamBIT) << endl;
+	updateBIT(bit, vet, 7, 12, tamBIT);
+	cout << getSum(bit, 7, tamBIT) << endl;
+
+    return 0;
+}
