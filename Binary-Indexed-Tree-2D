@@ -1,0 +1,74 @@
+#include <bits/stdc++.h>
+
+#define INF 0x3f3f3f3f
+#define MAX 50005
+#define all(x) (x.begin(), x.end())
+#define mp(x, y) (make_pair(x, y))
+#define endl '\n'
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#define swap(x, y) ((x) ^= (y) ^= (x) ^= (y))
+
+using namespace std;
+
+typedef long long ll;
+typedef unsigned long long ull;
+typedef vector<int> vi;
+typedef vector<vi> vii;
+typedef pair<int, int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+ll BIT[1100][1100];
+int n, m, p;
+
+void createBIT(){
+	memset(BIT, 0, sizeof(BIT));
+}
+
+int getSum(int x, int y){
+	ll res = 0;
+	for(int i = x + 1; i > 0; i -= (i & -i)){
+		for(int j = y + 1; j > 0; j -= (j & -j)){
+			res += BIT[i][j];
+		}
+	}
+	return res;
+}
+
+void updateBIT(int x, int y, int value){
+	for(int i = x + 1; i <= n; i += (i & -i)){
+		for(int j = y + 1; j <= m; j += (j & -j)){
+			BIT[i][j] += value;
+		}
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	while(cin >> n >> m and (n or m)){
+		int t;
+		cin >> t;
+		createBIT();
+		for(int i = 0; i < t; i++){
+			char c;
+			cin >> c;
+			if(c == 'A'){
+				int x, y, val;
+				cin >> val >> x >> y;
+				updateBIT(x, y, val); //Val é igual ao diff neste caso
+			} else {
+				int x1, y1, x2, y2;
+				cin >> x1 >> y1 >> x2 >> y2;
+				if(x1 > x2){
+					swap(x1, x2);
+				}
+				if(y1 > y2){
+					swap(y1, y2);
+				}
+
+				cout << (getSum(x2, y2) - getSum(x2, y1 - 1) - getSum(x1 - 1, y2) + getSum(x1 - 1, y1 - 1)) << endl;
+			}
+		} cout << endl;
+	}
+    return 0;
+}
