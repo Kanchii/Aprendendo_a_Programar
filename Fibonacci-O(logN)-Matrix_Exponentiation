@@ -19,8 +19,8 @@ typedef vector<vpii> vvpii;
  
 int fib(ull n){
   int F[2][2] = {{1,1},{1,0}};
-  power(F, n);
-  return (2*F[0][0] - 1)%m;
+  power(F, n);				//Se quiser saber o número de chamadas recursivas necessárias para calcular fib(n)
+  return F[0][0];			//faça, return (2*F[0][0]) - 1;
 }
  
 void power(int F[2][2], ull n){
@@ -28,8 +28,8 @@ void power(int F[2][2], ull n){
       return;
   int M[2][2] = {{1,1},{1,0}};
  
-  power(F, n/2, m);
-  multiply(F, F, m);
+  power(F, n/2);
+  multiply(F, F);
  
   if (n%2 != 0)
      multiply(F, M);
