@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+
+#define INF 0x3f3f3f3f
+#define MAX 50005
+#define all(x) (x.begin(), x.end())
+#define mp(x, y) (make_pair(x, y))
+#define endl '\n'
+#define max(a, b) ((a) > (b) ? (a) : (b))
+
+using namespace std;
+
+typedef long long ll;
+typedef unsigned long long ull;
+typedef vector<int> vi;
+typedef vector<vi> vii;               //O algoritmo para calcular o periodo de Pisano é dado pela ideia de encontrar em qual ponto
+typedef pair<int, int> pii;           //com i > 1, o ciclo se repete, então retornamos i + 1, que é tamanho do periodo
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+                        
+ull getPisanoPeriod(ull m) { //m = módulo usado no fibonacci
+    ull a = 0, b = 1, c = a + b;    
+    if(m % 1000 == 0){
+    	return 15 * pow(10, log10(m) - 1);
+    }
+    for (ull i = 0; ; i++) {  //Fibonacci de forma iterativa
+        c = (a + b) % m;
+        a = b;
+        b = c;
+        if (a == 0 && b == 1) { //Quando se repetir o ciclo inicial, retorne i + 1
+          return i + 1;
+        }
+    }
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	ull m;
+  cin >> m;
+  ull c = get_pisano_period(m);
+  cout << c << endl;
+
+  return 0;
+}
