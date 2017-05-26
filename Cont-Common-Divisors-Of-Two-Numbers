@@ -1,0 +1,36 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+typedef unsigned long long int ull;
+
+ull MDC(ull a, ull b){
+    ull res = 1;
+    while(res != 0){
+        res = a % b;
+        a = b;
+        b = res;
+    }
+    return a;
+}
+
+int main(){
+    ull a, b;
+    cin >> a >> b;
+    int cont = 0;
+    ull k = MDC(a, b);
+    for(int i = 1; i <= sqrt(k); i++){
+        if(k % i == 0){
+            if(k / i == i){
+                cont++;
+            } else {
+                cont += 2;
+            }
+        }
+    }
+    
+    cout << cont << endl;
+    
+    return 0;
+}
