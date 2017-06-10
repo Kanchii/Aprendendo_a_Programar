@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define INF 0x3f3f3f3f
+#define WHITE 0
+#define GRAY 1
+#define BLACK 2
+
+typedef unsigned long long int ull;
+typedef long long ll;
+
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int, int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+int pd[20][20];
+
+int solve(string a, int low, int high){
+	if(low > high){
+		return 0;
+	}
+	if(pd[low][high] != -1){
+		return pd[low][high];
+	}
+	int res = 0;
+	if(a[low] == a[high]){
+		res = max(res, (low == high ? 1 : 2) + solve(a, low + 1, high - 1));
+	}
+	int t1 = solve(a, low + 1, high);
+	int t2 = solve(a, low, high - 1);
+
+	res = max(res, max(t1, t2));
+	return pd[low][high] = res;
+}
+
+int main(int argc, char const *argv[]){	
+	ios_base::sync_with_stdio(false);
+	memset(pd, -1, sizeof(pd));
+
+	string a = "ababbababa";
+
+	cout << solve(a, 0, a.size() - 1) << endl;
+
+	return 0;
+}
