@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define INF 0x3f3f3f3f
+#define WHITE 0
+#define GRAY 1
+#define BLACK 2
+#define PI 3.14159265
+#define EPS 0.0000001
+#define MOD 1000000007
+#define MAX 1010
+
+typedef unsigned long long int ull;
+typedef long long ll;
+
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int, int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+int solve(int vet[], int n){    //Passe o array desordenado e o tamanho dele -> Retorna o número minimo de trocas necessárias
+    pair<int, int> aux[n + 1];  //para ordenar o vetor
+    for (int i = 0; i < n; i++){
+        aux[i].first = vet[i];
+        aux[i].second = i;
+    }
+    sort(aux, aux + n);
+    bool visited[n + 1];
+    memset(visited, false, sizeof(visited)); 
+    int ans = 0;
+    for (int i = 0; i < n; i++){
+        if (visited[i] || aux[i].second == i){
+            continue;
+        } else { 
+	        int tamCiclo = 0;
+	        int j = i;
+	        while (!visited[j]){
+	            visited[j] = 1; 
+	            j = aux[j].second;
+	            tamCiclo++;
+	        }	 
+	        ans = ans + tamCiclo - 1;
+	    }
+    }
+    return ans;
+}
+
+int main(int argc, char const *argv[]){
+
+	return 0;
+}
