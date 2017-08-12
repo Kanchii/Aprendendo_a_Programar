@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define INF 0x3f3f3f3f
+#define WHITE 0
+#define GRAY 1
+#define BLACK 2
+#define PI 3.14159265
+#define EPS 0.0000001
+#define MOD 1000000007
+#define MAX 1010
+
+typedef unsigned long long int ull;
+typedef long long ll;
+
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int, int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+ll findXOR(ll a, ll b){
+	ll vet[4];
+	if(a % 2 == 0){
+		vet[0] = b;
+		vet[1] = 1;
+		vet[2] = b ^ 1;
+		vet[3] = 0;
+	} else {
+		vet[0] = a;
+		vet[1] = a ^ b;
+		vet[2] = a - 1;
+		vet[3] = (a - 1) ^ b;
+	}
+	return vet[(b - a) % 4];
+}
+
+int main(int argc, char const *argv[]){
+
+	return 0;
+}
