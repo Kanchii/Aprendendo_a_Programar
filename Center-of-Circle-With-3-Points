@@ -1,0 +1,122 @@
+/*Algoritmo para calcular o centro de um circulo tendo apenas 3 pontos*/
+
+/*
+  Resolução do problema 1137 do URI Online Judge - Pontos Cocirculares
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define INF 0x3f3f3f3f
+#define WHITE 0
+#define GRAY 1
+#define BLACK 2
+#define PI 3.14159265
+#define EPS 1e-9
+#define MOD 1000000007
+#define MAX 1000000
+
+typedef unsigned long long int ull;
+typedef long long ll;
+
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int, int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+int cmp(double x, double y = 0, double tol = EPS) {
+    return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+}
+
+struct Point {
+	double x, y;
+
+	Point(double x = 0, double y = 0){
+		this -> x = x;
+		this -> y = y;
+	}
+
+	Point midPoint(Point &other){
+		return Point((this -> x + other.x) / 2.0, (this -> y + other.y) / 2.0);
+	}
+
+	bool operator < (const Point &p) const {
+        int t = cmp(this->x, p.x);
+        if (t != 0) return t < 0;
+        return cmp(this->y, p.y) < 0;
+	}
+
+	bool operator == (const Point &p) const {
+        return cmp(this->x, p.x) == 0 and cmp(this->y, p.y) == 0;
+	}
+
+};
+
+Point calcCenter(Point p, Point q, Point r, double d){
+	double ax = q.x - p.x;
+    double ay = q.y - p.y;
+    double bx = r.x - p.x;
+    double by = r.y - p.y;
+    
+    double cx = (q.x + p.x) / 2;
+    double cy = (q.y + p.y) / 2;
+    double dx = (r.x + p.x) / 2;
+    double dy = (r.y + p.y) / 2;
+    
+    double t1 = bx*dx + by*dy;
+    double t2 = ax*cx + ay*cy;
+    
+    double x = (by*t2 - ay*t1) / d;
+    double y = (ax*t1 - bx*t2) / d;
+
+	return Point(x, y);
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	int n;
+	while(cin >> n, n){
+		vector<Point> vet;
+		for(int i = 0; i < n; i++){
+			double x, y;
+			cin >> x >> y;
+			vet.push_back(Point(x, y));
+		}
+
+		if(n <= 2){
+			cout << n << endl;
+			continue;
+		}
+
+		int ans = 2;
+
+		for(int i = 0; i < vet.size(); i++){
+			for(int j = i + 1; j < vet.size(); j++){
+				map<Point, int> centers;
+				for(int k = 0; k < vet.size(); k++){
+					if(k == j or k == i){
+						continue;
+					}
+					double x0 = vet[i].x - vet[k].x;
+                    double y0 = vet[i].y - vet[k].y;
+                    double x1 = vet[j].x - vet[k].x;
+                    double y1 = vet[j].y - vet[k].y;
+                    double res = x0*y1 - y0*x1;
+					if (cmp(res, 0) == 0){
+						continue;	
+					} 
+					Point mid = calcCenter(vet[i], vet[j], vet[k], res);
+					centers[mid]++;
+					ans = max(ans, centers[mid] + 2);
+				}
+			}
+		}
+
+		cout << ans << endl;
+
+	}
+
+    return 0;
+}
