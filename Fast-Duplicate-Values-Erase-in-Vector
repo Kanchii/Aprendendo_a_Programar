@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define INF 0x3f3f3f3f
+#define WHITE 0
+#define GRAY 1
+#define BLACK 2
+#define PI 3.14159265
+#define EPS 1e-9
+#define MOD 1000000007
+#define MAX 1000000
+
+typedef unsigned long long int ull;
+typedef long long ll;
+
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int, int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+template<typename T>
+void eraseDuplicateValues(vector<T> &adj){
+	sort(adj.begin(),adj.end());
+    adj.erase(unique(adj.begin(),adj.end()),adj.end());
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+
+	vector<string> vet;
+
+	string pos[] = {"a", "b"};
+
+	for(int i = 0; i < 10; i++){
+		vet.push_back(pos[rand() % 2]);
+	}
+
+	for(int i = 0; i < vet.size(); i++){
+		cout << vet[i] << " ";
+	} cout << endl << endl;
+
+	eraseDuplicateValues(vet);
+
+	for(int i = 0; i < vet.size(); i++){
+		cout << vet[i] << " ";
+	} cout << endl;
+
+    return 0;
+}
