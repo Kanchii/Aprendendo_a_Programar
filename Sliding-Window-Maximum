@@ -1,0 +1,53 @@
+/*
+  Este algoritmo é capaz de pegar o maior valor de sub-arrays quando se tem uma janela movel de tamanho fixo k
+*/
+
+#include <bits/stdc++.h>
+ 
+using namespace std;
+ 
+typedef long long ll;
+typedef unsigned long long int ull;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int, int> pii;
+ 
+void solve(ull *vet, ull n, ull k){
+    deque<ull> Qi(k);
+
+    int i;
+    for(i = 0; i < k; i++){
+        while(!Qi.empty() and vet[i] >= vet[Qi.back()]){
+            Qi.pop_back();
+        }
+        Qi.push_back(i);
+    }
+
+    for(; i < n; i++){
+        cout << vet[Qi.front()] << " ";
+        while(!Qi.empty() and Qi.front() <= i - k){
+            Qi.pop_front();
+        }
+        while(!Qi.empty() and vet[i] >= vet[Qi.back()]){
+            Qi.pop_back();
+        }
+        Qi.push_back(i);
+    }
+}
+
+int main() {
+    ull n, k; //n = numero de elementos do vetor
+              //k = tamanho da janela
+    cin >> n >> k;
+    n++;
+    for(int i = 0; i < n; i++){
+        cin >> vet[i];
+    }
+
+    solve(vet, n, k);
+    cout << endl;
+
+}
+   
+    return 0;
+}
