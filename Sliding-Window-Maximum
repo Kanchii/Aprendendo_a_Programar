@@ -46,8 +46,6 @@ int main() {
 
     solve(vet, n, k);
     cout << endl;
-
-}
    
     return 0;
 }
