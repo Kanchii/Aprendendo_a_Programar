@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+
+#define debug(x) cout << #x " = " << (x) << endl
+#define INF 0x3f3f3f3f
+
+using namespace std;
+
+typedef long long ll;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<ii> vii;
+
+ll dp[1000005][3];
+string s;
+
+ll solve(int daVez, int m){
+    if(daVez == s.size() or !isdigit(s[daVez])){
+        return 0;
+    }
+    if(dp[daVez][m] != -1){
+        return dp[daVez][m];
+    }
+
+    int aux = (s[daVez] - '0' + m) % 3;
+    return dp[daVez][m] = ((aux == 0) + solve(daVez + 1, aux));
+}
+
+ll countDivBy3(){
+    memset(dp, -1, sizeof(dp));
+    ll ans = 0;
+    for(int i = 0; i < (int)s.size(); i++){
+        ans += solve(i,0);
+    }
+    return ans;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    s = "130a303";
+    cout << countDivBy3() << endl;
+    
+    /* res = 9 */
+    return 0;
+}
