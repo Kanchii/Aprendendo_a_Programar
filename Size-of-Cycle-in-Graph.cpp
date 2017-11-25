@@ -1,4 +1,4 @@
-/* Este algoritmo tem dentro da DFS uma função para calcular o tamanho de um ciclo dentro de um grago */
+/* Este algoritmo tem dentro da DFS uma função para calcular o tamanho de um ciclo dentro de um grafo */
 /*
 	Este algoritmo resolve o problema 1322 (Desejos das crianças) do URI Online Judge
 */
